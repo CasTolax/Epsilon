@@ -20,8 +20,8 @@ build:
 	mkdir -p ./bootloader/build
 	mkdir -p ./build
 	nasm -f bin ./bootloader/src/boot.asm -o ./bootloader/bin/boot.bin
-	nasm -f elf -g ./bootloader/src/kernel.asm -o ./bootloader/build/kernel.asm.o
-	$(CC) -I./bootloader/src $(FLAGS) -std=gnu99 -c ./bootloader/src/kernel.c -o ./bootloader/build/kernel.o
+	nasm -f elf -g ./bootloader/src/kernel/kernel.asm -o ./bootloader/build/kernel.asm.o
+	$(CC) -I./bootloader/src/kernel $(FLAGS) -std=gnu99 -c ./bootloader/src/kernel/kernel.c -o ./bootloader/build/kernel.o
 	$(LD) -m elf_i386 $(LDFLAGS) -g -relocatable $(FILES) -o ./build/completeKernel.o
 	$(CC) $(FLAGS) -no-pie -T ./linker.ld -o ./bootloader/bin/kernel.bin -ffreestanding -O0 -nostdlib ./build/completeKernel.o
 
