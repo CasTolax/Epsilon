@@ -9,8 +9,11 @@
 CODE_SEG equ 0x08
 DATA_SEG equ 0x10
 
-KERNEL_LOAD_SEG equ 0x100
-KERNEL_START_ADDR equ 0x0010000
+KERNEL_LOAD_SEG equ 0x100   
+
+;must be 0x00100000 or 0x00100. you can test so you find the correct adress.
+; but also look at the this sites... OSdev Wiki: Memory Map(x86)
+KERNEL_START_ADDR equ 0x00100000  ; must be 
 
 start:
     cli
