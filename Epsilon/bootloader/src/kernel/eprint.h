@@ -1,4 +1,4 @@
-
+#include "kernel.h"
 #include <stdint.h>
 
 #ifndef EPRINT_H
@@ -25,9 +25,10 @@
 #define Yellow 0xE
 #define WHITE 0xF
 
-void eput(char c);
-void eputs(const char* str);
-void eprint(const char* fmt, ...);
+// Print a char
+void eputchar(char c);
 
+// Print someting
+void eprint(const char* str);
 
 #endif
