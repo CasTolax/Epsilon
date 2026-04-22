@@ -2,53 +2,31 @@
 #include "eprint.h"
 #include <stdint.h>
 
-#define EPRINT_STATE_NORMAL             0
-#define EPRINT_STATE_LENGTH             1
-#define EPRINT_STATE_SHORT              2    
-#define EPRINT_STATE_LONG               3
+volatile uint16_t* video_memory = (uint16_t*)0xB8000;
 
-#define EPRINT_LENGTH_DEFAULT           0
-#define EPRINT_LENGTH_SHORT_SHORT       1
-#define EPRINT_LENGTH_SHORT             2
-#define EPRINT_LENGHT_LONG              3
-#define EPRINT_LENGHT_LONG_LONG         4
+int cursor_x = 0;
+int cursor_y = 0;
 
+void eputchar(char c) {
+   uint16_t* vga = (uint16_t*)0xB8000;
+   vga[0] = (0x0F << 8) | c;
 
-void eprint(const char* fmt , ...);
+    int index = cursor_y * 80 + cursor_x;
 
-void eprint(const char* fmt , ...)
-{   
-    int* argp = (int*)&fmt;
-    int state = EPRINT_STATE_NORMAL;
-    int lenght = EPRINT_LENGTH_DEFAULT;
+    video_memory[index] = (0x0F << 8) | (uint8_t)c;
 
-    while(*fmt)
-    {   
-        switch (state)
-        {
-        case EPRINT_STATE_NORMAL :
-                switch (*fmt)
-                {
-                    case '%': state = EPRINT_STATE_LENGTH;
-                               break;
-                    default:   eput(*fmt);
-                               break;
-                }
-            break;
-        case EPRINT_STATE_LENGTH:
-                switch (*fmt)
-                    case 'h': lenght = EPRINT_LENGTH_SHORT;
-                              state = EPRINT_STATE_SHORT;
-                              break;
-                    case 'l': lenght = EPRINT_LENGHT_LONG;
-                              state = EPRINT_STATE_LONG;
-                              break;
-                    default:
-                        break;
-                        // These codes are not complete yet.
-                
-        
-        }
-        fmt++;
+    cursor_x++;
+
+    if (cursor_x >= 80) {
+        cursor_x = 0;
+        cursor_y++;
+    }
+}
+
+void eprint(const char* str) {
+    int i = 0;
+    while (str[i] != 0) {
+        eputchar(str[i]);
+        i++;
     }
 }
