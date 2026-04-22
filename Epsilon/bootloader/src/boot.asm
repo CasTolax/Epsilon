@@ -9,11 +9,14 @@
 CODE_SEG equ 0x08
 DATA_SEG equ 0x10
 
-KERNEL_LOAD_SEG equ 0x100   
+KERNEL_LOAD_SEG equ 0x1000   
 
-;must be 0x00100000 or 0x00100. you can test so you find the correct adress.
-; but also look at the this sites... OSdev Wiki: Memory Map(x86)
-KERNEL_START_ADDR equ 0x00100000  ; must be 
+; Dont use other adress. So, we building a 32-bit OS and we can use just x86 memory maps...
+;KERNEL_LOAD_SEG = 0x1000
+;KERNEL_START_SEG = 0x00010000
+; İf we dont these x86 memory adress... When start the booting, the screen loop every second. And we doesnt
+; need that. 
+KERNEL_START_ADDR equ 0x00010000  ; must be 
 
 start:
     cli
@@ -35,7 +38,7 @@ start:
     xor bx, bx
 
     mov ah, 0x02        ; read sectors
-    mov al, 8           ; sector count
+    mov al, 20           ; sector count after 8
     mov ch, 0           ; cylinder
     mov dh, 0           ; head
     mov cl, 2           ; sector (boot sector sonrası)
@@ -137,7 +140,7 @@ pmode_start:
     mov esp, ebp
 
     ; Jump to kernel
-    jmp KERNEL_START_ADDR
+    jmp CODE_SEG:KERNEL_START_ADDR ;KERNEL_START_ADDR
 
 ; -------------------------
 ; Boot signature
